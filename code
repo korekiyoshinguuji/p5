@@ -1,0 +1,195 @@
+let cards;
+let clickedCards = []
+let backCard; 
+let monkey;
+let bear;
+let camel;
+let tiger;
+let rabbit;
+let duck;
+let tries = 0;
+let restart = false;
+var level = 1
+var camelSound;
+var playgame = true;
+
+function setup() {
+  createCanvas(640, 310);
+  cards = shuffle([10, 10, 20, 20, 30, 30])
+	
+}
+function preload() {
+    title = loadImage('Hungry Animals Help Screen.jpg')
+	backCard = loadImage('Hungry Animals Back of Card.jpg');
+	monkey = loadImage('Monkey Card.jpg');
+	bear = loadImage('Bear Card.jpg');
+	camel = loadImage('Camel Card.jpg');
+	tiger = loadImage('Tiger Card.jpg');
+    rabbit = loadImage('Rabbit Card.jpg')
+    duck = loadImage('Duck Card.jpg')
+    camelSound = loadSound('camel.mp3')
+    bearSound = loadSound('bear.wav')
+    monkeySound = loadSound('monkscream.wav')
+}
+
+
+
+function mousePressed(){
+	
+	if(clickedCards.length == 2){
+		if(cards[clickedCards[0]] == cards[clickedCards[1]] && clickedCards[0] != clickedCards[1]){
+          
+          
+          if (cards[clickedCards[0]] == 30) {
+            camelSound.amp(0.1)
+            camelSound.play()
+          }
+          
+          if (cards[clickedCards[0]] == 20) {
+            bearSound.amp(0.08)
+            bearSound.play()
+          }
+          if (cards[clickedCards[0]] == 10) {
+            monkeySound.amp(0.2)
+            monkeySound.play()
+          }
+          
+          
+          
+          
+          
+			if(clickedCards[0] < clickedCards[1]){
+				cards.splice(clickedCards[1],1)
+				cards.splice(clickedCards[0],1)
+			} else{
+				cards.splice(clickedCards[0],1)
+				cards.splice(clickedCards[1],1)
+			}
+				
+		}
+		clickedCards = [];
+		} else{
+			for(let i = 0; i < cards.length; i++){
+			let pos = 95 + i * 70;
+			if(mouseX >= pos && mouseX <= pos + 55 && mouseY >= 100 && mouseY <= 180){ 
+
+				if(i != clickedCards[0]){
+					clickedCards.push(i); 
+					tries += 1;
+				}
+				
+			}
+		}
+		
+	}
+}
+
+function keyPressed() {
+	if(keyCode == 82){
+		restart = true;
+	}
+	
+}
+
+function draw(){
+
+	
+  if (playgame == true) {
+    
+    background(title)
+
+	fill(255);
+	textSize(35);
+	textFont('Century Gothic');
+	text('Match the Animals', (width / 2) - 160 , 20, 400, 300);
+
+	
+	for(let i = 0; i < cards.length; i++){ 
+		image(backCard, 95 + (i * 70), 100, 55, 80);
+		if(clickedCards[0] == i || clickedCards[1] == i){
+	
+			if (cards[i] == 10){
+				image(monkey, 96 + (i * 70), 101, 53, 78);
+			}
+
+			if (cards[i] == 20){
+				image(bear, 96 + (i * 70), 101, 53, 78);
+			}
+
+			if (cards[i] == 30){
+				image(camel, 96 + (i * 70), 101, 53, 78);
+			}
+          
+			if (cards[i] == 40){
+				image(tiger, 96 + (i * 70), 101, 53, 78);
+			}
+
+			if (cards[i] == 50){
+				image(rabbit, 96 + (i * 70), 101, 53, 78);
+			}
+
+			if (cards[i] == 60){
+				image(duck, 96 + (i * 70), 101, 53, 78);
+			}
+			
+		}
+	}
+
+	
+
+    textSize(15);
+	text('Tries: ' + tries, 20, height - 50, 200, 100);
+	textSize(15);
+	text('Press "R" to restart', (width / 3) + 28, height - 50, 300, 100);
+  
+  	if(restart == true){
+		tries = 0;
+		cards = shuffle([10, 10, 20, 20, 30, 30]);
+		clickedCards = []
+		restart = false;
+		console.log('restart')
+	}
+  
+	if(cards.length == 0){
+      cards = shuffle([10, 10, 20, 20, 30, 30])
+    }
+    
+    
+    
+    
+    
+    if (mouseX < 50 && mouseY < 50 ){
+      background(title)
+      
+      playgame = false
+    }
+    
+    
+    
+    
+    
+    
+  } // end if statement
+  
+  if (playgame == false){
+    
+    fill(255);
+	textSize(35);
+	textFont('Century Gothic');
+	text('Instructions', (width / 2) - 90 , 20, 400, 300);
+    textSize(20);
+    text('This is a pretty simple game. You must turn over the cards, and match those which correspond with eachother. You win once all the cards are turned over successfully, and the less tries you have, the better.', (width / 2) - 200 , 60, 400, 300);
+    
+    //more text here
+    playgame = true
+    
+    
+    
+  }
+  
+  
+  
+  
+  
+  
+}// end draw  function
